@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Resume</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="heading"><strong>Editable Resume</strong></div>
+    <div class="main">
+        <form id="resumeform">
+            <div class="personal"><strong>Personal Info</strong></div>
+            <label for="picture" class="inputname"><strong>Upload Picture</strong></label>
+            <input type="file" name="picture" id="picture" class="forpic" accept="image/*"><br><br>
+            <label for="name" class="inputname"><strong>Name:</strong></label>
+            <input type="text" id="name" name="name" required><br><br>
+            <label for="email" class="inputname"><strong>Email:</strong></label>
+            <input type="email" name="email" id="email" required><br><br>
+            <label for="phone" class="inputname"><strong>Phone Number:</strong></label>
+            <input type="tel" name="phone" id="phone" required><br><br>
+            <label for="address" class="inputname"><strong>Address:</strong></label>
+            <input type="text" name="address" id="address" required><br><br>
+
+            <div class="personal"><strong>Skills</strong></div>
+            <label for="skills" class="inputname"><strong>Skills:</strong></label>
+            <input type="text" name="skills" id="skills" required><br><br>
+
+            <div class="personal"><strong>Education</strong></div>
+            <label for="education" class="inputname"><strong>Education:</strong></label>
+            <textarea name="education" id="education" required></textarea><br><br>
+
+            <div class="personal"><strong>Experience</strong></div>
+            <label for="experience" class="inputname"><strong>Work Experience:</strong></label>
+            <textarea name="experience" id="experience" required></textarea><br><br>
+
+            <input type="button" class="inputname" value="Generate Resume" onclick="generateResume()">
+        </form>
+
+        <div id="resumeOutput" class="resume-output" style="display:none; margin-top: 20px;">
+            <h2>Generated Resume</h2>
+            <img id="outputImage" alt="Profile Picture" style="max-width: 150px; display: block; margin-bottom: 20px;">
+            <p><strong>Name:</strong> <span id="outputName" contenteditable="false"></span></p>
+            <p><strong>Email:</strong> <span id="outputEmail" contenteditable="false"></span></p>
+            <p><strong>Phone:</strong> <span id="outputPhone" contenteditable="false"></span></p>
+            <p><strong>Address:</strong> <span id="outputAddress" contenteditable="false"></span></p>
+            <p><strong>Skills:</strong> <span id="outputSkills" contenteditable="false"></span></p>
+            <p><strong>Education:</strong></p>
+            <p id="outputEducation" contenteditable="false"></p>
+            <p><strong>Experience:</strong></p>
+            <p id="outputExperience" contenteditable="false"></p>
+            <button onclick="editResume()">Edit</button>
+            <button onclick="saveResume()" style="display:none;" id="saveButton">Save</button>
+        </div>
+    </div>
+
+    <script>
+        function generateResume() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const skills = document.getElementById('skills').value;
+            const education = document.getElementById('education').value;
+            const experience = document.getElementById('experience').value;
+
+            document.getElementById('outputName').textContent = name;
+            document.getElementById('outputEmail').textContent = email;
+            document.getElementById('outputPhone').textContent = phone;
+            document.getElementById('outputAddress').textContent = address;
+            document.getElementById('outputSkills').textContent = skills;
+            document.getElementById('outputEducation').textContent = education;
+            document.getElementById('outputExperience').textContent = experience;
+
+            const picture = document.getElementById('picture').files[0];
+            if (picture) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.getElementById('outputImage').src = e.target.result;
+                    document.getElementById('outputImage').style.display = 'block';
+                }
+                reader.readAsDataURL(picture);
+            }
+
+            document.getElementById('resumeOutput').style.display = 'block';
+            document.getElementById('resumeform').style.display = 'none';
+        }
+
+        function editResume() {
+            const editableElements = document.querySelectorAll('#resumeOutput span, #resumeOutput p');
+            editableElements.forEach(el => el.setAttribute('contenteditable', 'true'));
+            document.getElementById('saveButton').style.display = 'inline';
+        }
+
+        function saveResume() {
+            const editableElements = document.querySelectorAll('#resumeOutput span, #resumeOutput p');
+            editableElements.forEach(el => el.setAttribute('contenteditable', 'false'));
+            document.getElementById('saveButton').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
